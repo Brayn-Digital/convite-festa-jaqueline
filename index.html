@@ -16,11 +16,10 @@
         body { 
             font-family: 'Baloo 2', cursive; 
             background-color: #000;
-            /* Desabilita a seleção de texto */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* Internet Explorer/Edge */
-            user-select: none;         /* Padrão */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .title-font { font-family: 'Pacifico', cursive; text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; }
         .card { background-color: #000; border: 2px solid #ff00ff; opacity: 0; transition: opacity 1s ease-in-out; position: relative; overflow: hidden; animation: borderPulse 4s ease-in-out infinite; }
@@ -37,8 +36,6 @@
         #card-glow { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 0, 255, 0.15), transparent 40%); pointer-events: none; transition: left 0.1s linear, top 0.1s linear; }
         .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .scroll-reveal.active { opacity: 1; transform: translateY(0); }
-        .gallery-img { cursor: pointer; }
-        .gallery-img:hover { transform: scale(1.05) translateY(-5px); }
         @keyframes borderPulse { 0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.7); border-color: #ff00ff; } 50% { box-shadow: 0 0 35px rgba(255, 0, 255, 1); border-color: #ffc2ff; } }
         
         #enter-button {
@@ -55,19 +52,103 @@
             0%, 100% { transform: scale(1); box-shadow: 0 0 15px #ff00ff; } 
             50% { transform: scale(1.05); box-shadow: 0 0 30px #ff00ff; } 
         }
-
-        #lightbox { position: fixed; inset: 0; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        #lightbox.active { opacity: 1; pointer-events: all; }
-        #lightbox img { max-width: 90vw; max-height: 80vh; transition: transform 0.3s ease; }
-        .lightbox-btn { position: absolute; color: white; background: rgba(0,0,0,0.5); border-radius: 50%; width: 50px; height: 50px; font-size: 2rem; border: none; cursor: pointer; }
-        #lightbox-close { top: 20px; right: 20px; }
-        #lightbox-prev { left: 20px; }
-        #lightbox-next { right: 20px; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center px-4 pt-8 pb-28">
+<body class="min-h-screen flex items-center justify-center px-4 pb-28">
 
-    <!-- === TELA DE ABERTURA COM BOTÃO === -->
+    <!-- Wrapper para centralizar o card e o rodapé juntos -->
+    <div class="flex flex-col items-center pt-8">
+        <!-- CONVITE PRINCIPAL (INVISÍVEL INICIALMENTE) -->
+        <div class="max-w-xl w-full rounded-2xl overflow-hidden card" id="main-card">
+            
+            <div id="card-glow"></div>
+            
+            <div class="h-56 md:h-auto md:aspect-video w-full overflow-hidden">
+                <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <source src="letreiro2.mp4" type="video/mp4">
+                    Seu navegador não suporta o vídeo.
+                </video>
+            </div>
+            
+            <div class="relative px-6 md:px-8 text-center">
+                <img class="h-32 w-32 rounded-full border-4 border-pink-500 mx-auto shadow-lg object-cover -mt-10 md:-mt-16" 
+                     src="jaq.jpeg" alt="Foto da Jaqueline">
+                
+                <div class="mt-4">
+                    <h1 class="title-font text-5xl text-pink-400 mb-2">Jaqueline</h1>
+                    <p class="text-xl font-semibold text-gray-100">comemora seus 45 anos!</p>
+                    <p class="text-gray-300 mt-2 text-lg">Uma noite especial para brindar à vida com pessoas queridas, <br>muito chopp e comida boa!</p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-100 scroll-reveal">
+                    <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500"><div class="flex items-center space-x-4"><i class="fas fa-calendar-alt text-pink-400 text-3xl"></i><div><h3 class="font-bold text-lg">Data</h3><p class="text-gray-300"><span id="party-date-text"></span></p></div></div></div>
+                    <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500"><div class="flex items-center space-x-4"><i class="fas fa-clock text-pink-400 text-3xl"></i><div><h3 class="font-bold text-lg">Horário</h3><p class="text-gray-300">A partir das <span class="font-bold">18:00</span></p></div></div></div>
+                </div>
+
+                <div class="text-center bg-pink-900/20 p-4 rounded-lg border border-pink-800 scroll-reveal">
+                    <h3 class="font-bold text-pink-300 text-xl mb-2 flex items-center justify-center gap-2"><i class="fas fa-utensils"></i> Rodízio de comida de Boteco & Chopp <i class="fas fa-beer"></i></h3>
+                    <p class="text-gray-300">Para celebrar, a festa será na choperia Nórdicos, com Rodízio de comida de Boteco e rodízio de chop!
+                </div>
+                
+                <div class="scroll-reveal">
+                    <h3 class="text-center font-bold text-pink-300 text-xl mb-4 flex items-center justify-center gap-2"><i class="fas fa-dollar-sign"></i> Valores por Pessoa</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-100 text-center">
+                        <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Opção Colina & Vinho</h4>
+                                <p class="text-sm text-gray-400 mt-1">Rodízio de Boteco Raiz com Chopp Colina e Vinho à vontade.</p>
+                            </div>
+                            <p class="text-3xl font-bold text-pink-400 mt-4">R$ 79,90</p>
+                        </div>
+                         <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Opção Brahma & Suco</h4>
+                                <p class="text-sm text-gray-400 mt-1">Rodízio de Boteco Raiz com Chopp Brahma e Suco da fruta à vontade.</p>
+                            </div>
+                            <p class="text-3xl font-bold text-pink-400 mt-4">R$ 99,90</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scroll-reveal">
+                    <h3 class="text-center font-bold text-pink-300 text-xl mb-4">Como Chegar ao Local</h3>
+                    <div class="bg-black/20 p-4 rounded-t-lg shadow-md border-l-4 border-r-4 border-t-4 border-pink-500">
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-map-marker-alt text-pink-400 text-3xl"></i>
+                            <div>
+                                <p class="text-gray-200 font-semibold">Choperia Nórdicos</p>
+                                <p class="text-sm text-gray-400">R. Alberto Teixeira da Cunha, 970 - Nilópolis, RJ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-b-lg overflow-hidden shadow-md h-64 border-l-4 border-r-4 border-b-4 border-pink-500">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d919.7121285040929!2d-43.41662923027878!3d-22.77073406326233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9966b9ae7d3539%3A0x6769e54823a07a61!2sChoperia%20N%C3%B3rdicos!5e0!3m2!1spt-BR!2sbr!4v1719511111241!5m2!1spt-BR!2sbr" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                     <a href="https://www.google.com/maps/dir/?api=1&destination=Choperia%20Nórdicos%20Nilópolis%20RJ" target="_blank" class="mt-2 block text-center text-sm font-bold text-pink-400 hover:text-pink-300 transition-colors duration-200 hover:translate-y-[-3px]"><i class="fas fa-route mr-1"></i> ABRIR ROTA NO GOOGLE MAPS</a>
+                </div>
+
+                <div class="mt-6 text-center scroll-reveal">
+                    <h3 class="font-bold text-pink-300 text-2xl mb-2 animate-subtle-pulse">Confirme sua Presença!</h3>
+                    <p class="text-gray-300 mb-4">Sua presença é muito importante. Por favor, confirme até 21/06.</p>
+                    <a href="https://wa.me/5521920236478?text=Oba!%20Estou%20confirmado(a)%20para%20a%20festa%20de%2045%20anos%20da%20Jaqueline!%20%F0%9F%8E%89%F0%9F%8D%BB" 
+                       target="_blank"
+                       class="btn-neon font-bold py-3 px-8 rounded-full inline-flex items-center text-lg">
+                        <i class="fab fa-whatsapp text-2xl mr-3"></i> CONFIRMAR NO WHATSAPP
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ▼▼▼ RODAPÉ AJUSTADO PARA MAIOR LEITURA ▼▼▼ -->
+        <footer class="mt-8 text-center text-base text-gray-300">
+            <p class="mb-1">feito com ❤️ por Brayn - Marketing Digital.</p>
+            <p>© <span id="current-year"></span>. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+
     <div id="video-overlay">
         <video autoplay muted loop playsinline id="intro-video">
             <source src="convite.mp4" type="video/mp4">
@@ -75,108 +156,16 @@
         </video>
         <button id="enter-button">ENTRAR</button>
     </div>
-    
-    <!-- CONVITE PRINCIPAL (INVISÍVEL INICIALMENTE) -->
-    <div class="max-w-xl w-full rounded-2xl overflow-hidden card" id="main-card">
-        
-        <div id="card-glow"></div>
-        
-        <!-- CORREÇÃO FINAL E RESPONSIVA (COM md:h-auto) -->
-        <div class="h-56 md:h-auto md:aspect-video w-full overflow-hidden">
-            <video autoplay loop muted playsinline class="w-full h-full object-cover">
-                <source src="letreiro2.mp4" type="video/mp4">
-                Seu navegador não suporta o vídeo.
-            </video>
-        </div>
-        
-        <div class="relative px-6 md:px-8 text-center">
-            <img class="h-32 w-32 rounded-full border-4 border-pink-500 mx-auto shadow-lg object-cover -mt-10 md:-mt-16" 
-                 src="jaq.jpeg" alt="Foto da Jaqueline">
-            
-            <div class="mt-4">
-                <h1 class="title-font text-5xl text-pink-400 mb-2">Jaqueline</h1>
-                <p class="text-xl font-semibold text-gray-100">comemora seus 45 anos!</p>
-                <p class="text-gray-300 mt-2 text-lg">Uma noite especial para brindar à vida com pessoas queridas, <br>muito chopp e comida boa!</p>
-            </div>
-        </div>
-        
-        <div class="p-6 md:p-8 space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-100 scroll-reveal">
-                <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500"><div class="flex items-center space-x-4"><i class="fas fa-calendar-alt text-pink-400 text-3xl"></i><div><h3 class="font-bold text-lg">Data</h3><p class="text-gray-300"><span id="party-date-text"></span></p></div></div></div>
-                <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500"><div class="flex items-center space-x-4"><i class="fas fa-clock text-pink-400 text-3xl"></i><div><h3 class="font-bold text-lg">Horário</h3><p class="text-gray-300">A partir das <span class="font-bold">18:00</span></p></div></div></div>
-            </div>
 
-            <div class="text-center bg-pink-900/20 p-4 rounded-lg border border-pink-800 scroll-reveal">
-                <h3 class="font-bold text-pink-300 text-xl mb-2 flex items-center justify-center gap-2"><i class="fas fa-utensils"></i> Rodízio de comida de Boteco & Chopp <i class="fas fa-beer"></i></h3>
-                <p class="text-gray-300">Para celebrar, a festa será na choperia Nórdicos, com Rodízio de comida de Boteco e rodízio de chop!
-            </div>
-            
-            <div class="scroll-reveal">
-                <h3 class="text-center font-bold text-pink-300 text-xl mb-4 flex items-center justify-center gap-2"><i class="fas fa-dollar-sign"></i> Valores por Pessoa</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-100 text-center">
-                    <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500 flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-bold text-lg text-white">Opção Colina & Vinho</h4>
-                            <p class="text-sm text-gray-400 mt-1">Rodízio de Boteco Raiz com Chopp Colina e Vinho à vontade.</p>
-                        </div>
-                        <p class="text-3xl font-bold text-pink-400 mt-4">R$ 79,90</p>
-                    </div>
-                     <div class="bg-black/20 p-4 rounded-lg shadow-md border-l-4 border-pink-500 flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-bold text-lg text-white">Opção Brahma & Suco</h4>
-                            <p class="text-sm text-gray-400 mt-1">Rodízio de Boteco Raiz com Chopp Brahma e Suco da fruta à vontade.</p>
-                        </div>
-                        <p class="text-3xl font-bold text-pink-400 mt-4">R$ 99,90</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="scroll-reveal">
-                <h3 class="text-center font-bold text-pink-300 text-xl mb-4">Como Chegar ao Local</h3>
-                <div class="bg-black/20 p-4 rounded-t-lg shadow-md border-l-4 border-r-4 border-t-4 border-pink-500">
-                    <div class="flex items-center space-x-4">
-                        <i class="fas fa-map-marker-alt text-pink-400 text-3xl"></i>
-                        <div>
-                            <p class="text-gray-200 font-semibold">Choperia Nórdicos</p>
-                            <p class="text-sm text-gray-400">R. Alberto Teixeira da Cunha, 970 - Nilópolis, RJ</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="rounded-b-lg overflow-hidden shadow-md h-64 border-l-4 border-r-4 border-b-4 border-pink-500">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d919.7121285040929!2d-43.41662923027878!3d-22.77073406326233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9966b9ae7d3539%3A0x6769e54823a07a61!2sChoperia%20N%C3%B3rdicos!5e0!3m2!1spt-BR!2sbr!4v1719511111241!5m2!1spt-BR!2sbr" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                 <a href="https://www.google.com/maps/dir/?api=1&destination=Choperia%20Nórdicos%20Nilópolis%20RJ" target="_blank" class="mt-2 block text-center text-sm font-bold text-pink-400 hover:text-pink-300 transition-colors duration-200 hover:translate-y-[-3px]"><i class="fas fa-route mr-1"></i> ABRIR ROTA NO GOOGLE MAPS</a>
-            </div>
-
-            <div class="mt-6 text-center scroll-reveal">
-                <h3 class="font-bold text-pink-300 text-2xl mb-2 animate-subtle-pulse">Confirme sua Presença!</h3>
-                <p class="text-gray-300 mb-4">Sua presença é muito importante. Por favor, confirme até 21/06.</p>
-                <a href="https://wa.me/5521920236478?text=Oba!%20Estou%20confirmado(a)%20para%20a%20festa%20de%2045%20anos%20da%20Jaqueline!%20%F0%9F%8E%89%F0%9F%8D%BB" 
-                   target="_blank"
-                   class="btn-neon font-bold py-3 px-8 rounded-full inline-flex items-center text-lg">
-                    <i class="fab fa-whatsapp text-2xl mr-3"></i> CONFIRMAR NO WHATSAPP
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div id="lightbox">
-        <button id="lightbox-close" class="lightbox-btn">×</button>
-        <button id="lightbox-prev" class="lightbox-btn">❮</button>
-        <img id="lightbox-img" src="" alt="Imagem da galeria em tela cheia">
-        <button id="lightbox-next" class="lightbox-btn">❯</button>
-    </div>
-    
     <audio id="background-music" src="musica.mp3" loop></audio>
-    
     <div id="countdown-container" class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm text-white p-3 z-20 shadow-lg text-center">
         <div class="text-xs text-pink-300 tracking-widest mb-1">CONTAGEM REGRESSIVA</div>
         <div id="countdown" class="font-bold flex items-center justify-center space-x-4 md:space-x-6">
         </div>
     </div>
 
+
     <script>
-        // SCRIPT PRINCIPAL DO CONVITE
         document.addEventListener('DOMContentLoaded', () => {
             const videoOverlay = document.getElementById('video-overlay');
             const enterButton = document.getElementById('enter-button');
@@ -254,85 +243,21 @@
             }, { threshold: 0.1 });
             revealElements.forEach(el => { revealObserver.observe(el); });
 
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const galleryImages = document.querySelectorAll('.gallery-img');
-            const gallerySrcs = Array.from(galleryImages).map(img => img.src);
-            let currentIndex = 0;
-
-            function openLightbox(index) {
-                currentIndex = index;
-                lightboxImg.src = gallerySrcs[currentIndex];
-                lightbox.classList.add('active');
-            }
-            function closeLightbox() { lightbox.classList.remove('active'); }
-            function showNextImage() {
-                currentIndex = (currentIndex + 1) % gallerySrcs.length;
-                lightboxImg.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    lightboxImg.src = gallerySrcs[currentIndex];
-                    lightboxImg.style.transform = 'scale(1)';
-                }, 150);
-            }
-            function showPrevImage() {
-                currentIndex = (currentIndex - 1 + gallerySrcs.length) % gallerySrcs.length;
-                lightboxImg.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    lightboxImg.src = gallerySrcs[currentIndex];
-                    lightboxImg.style.transform = 'scale(1)';
-                }, 150);
-            }
-
-            galleryImages.forEach((img, index) => {
-                img.addEventListener('click', () => openLightbox(index));
-            });
-
-            document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-            document.getElementById('lightbox-next').addEventListener('click', showNextImage);
-            document.getElementById('lightbox-prev').addEventListener('click', showPrevImage);
-            lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-            document.addEventListener('keydown', (e) => {
-                if (!lightbox.classList.contains('active')) return;
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowRight') showNextImage();
-                if (e.key === 'ArrowLeft') showPrevImage();
-            });
+            document.getElementById('current-year').textContent = new Date().getFullYear();
         });
     </script>
 
-    <!-- ▼▼▼ SCRIPT DE PROTEÇÃO CONTRA CÓPIA ▼▼▼ -->
     <script>
-        // 1. Desabilita o menu do botão direito
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
-
-        // 2. Desabilita atalhos de teclado para cópia e inspeção
         document.onkeydown = function(e) {
-            // Bloqueia F12 (ferramentas de desenvolvedor)
-            if (event.keyCode == 123) {
-                return false;
-            }
-            // Bloqueia Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                return false;
-            }
-            // Bloqueia Ctrl+Shift+C
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-                return false;
-            }
-            // Bloqueia Ctrl+Shift+J
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                return false;
-            }
-            // Bloqueia Ctrl+U (ver código-fonte)
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                return false;
-            }
-            // Bloqueia Ctrl+S (salvar página)
-            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {
-                return false;
-            }
+            if (event.keyCode == 123) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
         };
     </script>
 
